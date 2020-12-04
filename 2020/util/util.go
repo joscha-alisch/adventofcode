@@ -2,11 +2,33 @@ package util
 
 import (
 	"bufio"
+	"errors"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"
 	"strconv"
 )
+
+func RunIt(input string, part1 func(lines []string) int64, part2 func(lines []string) int64) {
+	ConfigureLogging()
+
+	in, err := ReadInput(input)
+	HandleError(err)
+
+	answer1 := part1(in)
+	if answer1 == 0 {
+		HandleError(errors.New("couldn't find answer for part 1"))
+	}
+
+	log.Info().Int64("answer", answer1).Msg("Part 1")
+
+	answer2 := part2(in)
+	if answer2 == 0 {
+		HandleError(errors.New("couldn't find answer for part 2"))
+	}
+
+	log.Info().Int64("answer", answer2).Msg("Part 2")
+}
 
 func ConfigureLogging() {
 	consoleWriter := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: "15:04:05"}
@@ -14,7 +36,7 @@ func ConfigureLogging() {
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 }
 
-func ReadInput(path string) ([]int64, error) {
+func ReadInput(path string) ([]string, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -22,13 +44,9 @@ func ReadInput(path string) ([]int64, error) {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	var result []int64
+	var result []string
 	for scanner.Scan() {
-		i, err := strconv.ParseInt(scanner.Text(), 10, 64)
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, i)
+		result = append(result, scanner.Text())
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -43,4 +61,14 @@ func HandleError(err error) {
 		log.Error().Err(err).Msg("")
 		os.Exit(1)
 	}
+}
+
+func ConvertToInts(arr []string) []int64 {
+	var result []int64
+	for _, s := range arr {
+		i, err := strconv.ParseInt(s, 10, 64)
+		HandleError(err)
+		result = append(result, i)
+	}
+	return result
 }

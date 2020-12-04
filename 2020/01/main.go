@@ -2,32 +2,15 @@ package main
 
 import (
 	"adventofcode-2020/util"
-	"errors"
-	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	util.ConfigureLogging()
-
-	numbers, err := util.ReadInput("./01/input.txt")
-	util.HandleError(err)
-
-	answer1 := calculateAnswerPart1(numbers)
-	if answer1 == 0 {
-		util.HandleError(errors.New("couldn't find answer"))
-	}
-
-	log.Info().Int64("answer", answer1).Msg("Part 1")
-
-	answer2 := calculateAnswerPart2(numbers)
-	if answer2 == 0 {
-		util.HandleError(errors.New("couldn't find answer"))
-	}
-
-	log.Info().Int64("answer", answer2).Msg("Part 2")
+	util.RunIt("./01/input.txt", part1, part2)
 }
 
-func calculateAnswerPart1(numbers []int64) int64 {
+func part1(lines []string) int64 {
+	numbers := util.ConvertToInts(lines)
+
 	for _, a := range numbers {
 		for _, b := range numbers {
 			if a+b == 2020 {
@@ -39,7 +22,9 @@ func calculateAnswerPart1(numbers []int64) int64 {
 	return 0
 }
 
-func calculateAnswerPart2(numbers []int64) int64 {
+func part2(lines []string) int64 {
+	numbers := util.ConvertToInts(lines)
+
 	for _, a := range numbers {
 		for _, b := range numbers {
 			for _, c := range numbers {
