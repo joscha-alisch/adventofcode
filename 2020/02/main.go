@@ -35,12 +35,7 @@ func part2(lines []string) int64 {
 }
 
 func IsValidPart1(line string) bool {
-	var from, to int
-	var char, password string
-	line = strings.ReplaceAll(line, "-", " ")
-	line = strings.ReplaceAll(line, ":", "")
-	_, err := fmt.Sscanf(line, "%d %d %s %s", &from, &to, &char, &password)
-	util.HandleError(err)
+	from, to, char, password := scanLine(line)
 
 	n := strings.Count(password, char)
 	if n < from || n > to {
@@ -51,12 +46,7 @@ func IsValidPart1(line string) bool {
 }
 
 func IsValidPart2(line string) bool {
-	var from, to int
-	var char, password string
-	line = strings.ReplaceAll(line, "-", " ")
-	line = strings.ReplaceAll(line, ":", "")
-	_, err := fmt.Sscanf(line, "%d %d %s %s", &from, &to, &char, &password)
-	util.HandleError(err)
+	from, to, char, password := scanLine(line)
 	if len(password) < to {
 		util.HandleError(errors.New("invalid password length"))
 	}
@@ -65,4 +55,12 @@ func IsValidPart2(line string) bool {
 	atSecond := string(password[to-1]) == char
 
 	return atFirst != atSecond
+}
+
+func scanLine(line string) (from int, to int, char string, password string) {
+	line = strings.ReplaceAll(line, "-", " ")
+	line = strings.ReplaceAll(line, ":", "")
+	_, err := fmt.Sscanf(line, "%d %d %s %s", &from, &to, &char, &password)
+	util.HandleError(err)
+	return
 }
