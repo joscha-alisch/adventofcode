@@ -72,3 +72,32 @@ func ConvertToInts(arr []string) []int64 {
 	}
 	return result
 }
+
+func GroupByBlankLines(lines []string) [][]string {
+	var results [][]string
+	var current []string
+
+	for _, line := range lines {
+		if line == "" {
+			results = append(results, current)
+			current = make([]string, 0)
+		} else {
+			current = append(current, line)
+		}
+	}
+	results = append(results, current)
+
+	return results
+}
+
+func CountUniqueChars(s string) int {
+	count := 0
+	m := NewHashset()
+	for _, c := range s {
+		if !m.Contains(int(c)) {
+			m.Add(int(c))
+			count++
+		}
+	}
+	return count
+}

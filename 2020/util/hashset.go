@@ -1,4 +1,4 @@
-package main
+package util
 
 type hashset struct {
 	m map[int]bool

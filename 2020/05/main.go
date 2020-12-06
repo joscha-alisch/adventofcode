@@ -24,7 +24,7 @@ func part1(lines []string) int64 {
 }
 
 func part2(lines []string) int64 {
-	ids := NewHashset()
+	ids := util.NewHashset()
 	maxId := 127*8 + 7
 
 	for _, line := range lines {
